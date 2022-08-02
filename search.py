@@ -16,7 +16,6 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
-
 import util
 
 class SearchProblem:
@@ -72,6 +71,8 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+        
+
 def depthFirstSearch(problem: SearchProblem):
     """
     Search the deepest nodes in the search tree first.
@@ -82,17 +83,64 @@ def depthFirstSearch(problem: SearchProblem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
     """
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+   
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # visited list
+    visited = []
+    # Frontier stack
+    my_stack = util.Stack()
+    my_stack.push((problem.getStartState(), [], 0))
+    # checks if goal is found
+    goal_found = False
+
+    while goal_found == False:
+        node = problem.getSuccessors(problem.getStartState())
+        node, path, cost = my_stack.pop()
+
+        if problem.isGoalState(node):
+            goal_found = True
+            return path
+            print("goal found!")
+        else:
+            visited.append(node)
+            
+            for child_position, child_path, child_cost in problem.getSuccessors(node):
+                if not (child_position in visited):
+                    my_stack.push((child_position ,path + [child_path], child_cost))
+                    
+                else:
+                    print("not working")  
+
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    "*** YOUR CODE HERE ***"
+    # visited list
+    visited = []
+    # Frontier stack
+    my_que = util.Queue()
+    my_que.push((problem.getStartState(), [], 0))
+    # checks if goal is found
+    goal_found = False
+
+    while goal_found == False:
+        node = problem.getSuccessors(problem.getStartState())
+        node, path, cost = my_que.pop()
+
+        if problem.isGoalState(node):
+            goal_found = True
+            return path
+            print("goal found!")
+        else:
+            visited.append(node)
+            
+            for child_position, child_path, child_cost in problem.getSuccessors(node):
+                if not (child_position in visited):
+                    my_que.push((child_position ,path + [child_path], child_cost)) 
+                else:
+                    print("not working") 
+   
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
